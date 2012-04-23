@@ -1,5 +1,6 @@
 (*
- * Copyright (c) 2012 Sebastian Probst Eide <sebastian.probst.eide@gmail.com>
+ * Copyright (c) 2005-2012 Anil Madhavapeddy <anil@recoil.org>, 
+ *                         Charalampos Rotsos <cr409@cl.cam.ac.uk>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,13 +15,19 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
+(* register a callback for a specific flow match *)
 
-(** Find is the main entry point to the connections module.
- *  Given the name of two endpoints it will attempt to establish
- *  a link between them, and will immediately return with all
- *  known existing links
- *)
-val find : Sp.name -> Sp.name -> Sp.addressable list
 
-val tactic_by_name : Rpc.tactic_name -> (module Sp.TacticSig) option
-val connect_using_tactic : string -> string -> string -> unit Lwt.t
+(* module OP = Ofpacket *)
+(* val register_pkt_in_cb : Ofpacket.Match.t -> (Controller.state -> Ofpacket.datapath_id -> (Ofpacket.Port.t * int32 *
+Bitstring.t * Ofpacket.datapath_id) -> unit Lwt.t) -> unit *)
+
+(* setup a listening openflow controller *)
+val listen : ?port:int -> unit -> unit Lwt.t
+
+val register_handler : Ofpacket.Match.t -> 
+  (Controller.state -> Ofpacket.datapath_id -> 
+     Controller.Event.e -> unit Lwt.t) -> unit
+
+val add_dev : string -> string -> string -> unit Lwt.t
+val del_dev : string -> string -> string -> unit Lwt.t
