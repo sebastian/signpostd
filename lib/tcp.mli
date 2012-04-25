@@ -1,5 +1,5 @@
-(*
- * Copyright (c) 2012 Sebastian Probst Eide <sebastian.probst.eide@gmail.com>
+(* 
+ * Copyright (c) 2012 Charalampos Rotsos <cr409@cl.cam.ac.uk>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,13 +14,17 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
+open Bitstring
 
-(** Find is the main entry point to the connections module.
- *  Given the name of two endpoints it will attempt to establish
- *  a link between them, and will immediately return with all
- *  known existing links
- *)
-val find : Sp.name -> Sp.name -> Sp.addressable list
+val get_tcp_sn : Bitstring.t -> int32
+val get_tcp_packet_payload : Bitstring.t -> Bitstring.t
+val gen_server_syn : Bitstring.t -> int32 -> string -> 
+  string -> int32 -> int32 -> int -> Bitstring.t  
+val gen_server_ack : int32 -> int32 -> string -> 
+  string -> int32 -> int32 -> int -> int ->  int -> Bitstring.t
+val gen_server_synack : int32 -> int32 -> string -> 
+  string -> int32 -> int32 -> int -> int -> Bitstring.t
 
-val tactic_by_name : Rpc.tactic_name -> (module Sp.TacticSig) option
-val connect_using_tactic : string -> string -> string -> unit Lwt.t
+val gen_tcp_data_pkt : int32 -> int32 -> string -> 
+  string -> int32 -> int32 -> int -> int -> Bitstring.t -> 
+  Bitstring.t
